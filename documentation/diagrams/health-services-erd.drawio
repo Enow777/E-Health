@@ -1,0 +1,36 @@
+<mxfile host="app.diagrams.net" modified="2026-06-02T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="health-services-erd" name="Health Services ERD">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="HEALTH SERVICES APPLICATION - ENTITY RELATIONSHIP DIAGRAM" style="text;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="255" y="20" width="900" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="patient" value="&lt;b&gt;PATIENT&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; patientId : string&lt;br&gt;fullName : string&lt;br&gt;email : string&lt;br&gt;phoneNumber : string&lt;br&gt;dateOfBirth : date" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="90" y="130" width="330" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="doctor" value="&lt;b&gt;DOCTOR&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; doctorId : string&lt;br&gt;fullName : string&lt;br&gt;speciality : string&lt;br&gt;clinic : string&lt;br&gt;location : string&lt;br&gt;rating : float" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="990" y="130" width="330" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="appointment" value="&lt;b&gt;APPOINTMENT&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; appointmentId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; patientId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; doctorId : string&lt;br&gt;scheduledAt : datetime&lt;br&gt;consultationType : string&lt;br&gt;status : string" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="535" y="400" width="360" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="record" value="&lt;b&gt;MEDICAL_RECORD&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; recordId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; patientId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; appointmentId : string&lt;br&gt;recordType : string&lt;br&gt;title : string&lt;br&gt;fileUrl : string&lt;br&gt;createdAt : datetime" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="50" y="760" width="340" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="prescription" value="&lt;b&gt;PRESCRIPTION&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; prescriptionId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; patientId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; doctorId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; appointmentId : string&lt;br&gt;medicationName : string&lt;br&gt;dosage : string&lt;br&gt;schedule : string" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="535" y="760" width="360" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="notification" value="&lt;b&gt;NOTIFICATION&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; notificationId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; patientId : string&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; appointmentId : string&lt;br&gt;category : string&lt;br&gt;message : string&lt;br&gt;isRead : boolean&lt;br&gt;createdAt : datetime" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="760" width="340" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="books" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="patient" target="appointment"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="receives" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="doctor" target="appointment"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="produces" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="appointment" target="record"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="generates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="appointment" target="prescription"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="triggers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="appointment" target="notification"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

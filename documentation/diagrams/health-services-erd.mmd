@@ -1,0 +1,68 @@
+%% Health Services Mobile Application
+%% Entity Relationship Diagram
+erDiagram
+    PATIENT ||--o{ APPOINTMENT : books
+    DOCTOR ||--o{ APPOINTMENT : receives
+    PATIENT ||--o{ MEDICAL_RECORD : owns
+    APPOINTMENT ||--o{ MEDICAL_RECORD : produces
+    PATIENT ||--o{ PRESCRIPTION : receives
+    DOCTOR ||--o{ PRESCRIPTION : issues
+    APPOINTMENT ||--o{ PRESCRIPTION : generates
+    PATIENT ||--o{ NOTIFICATION : receives
+    APPOINTMENT ||--o{ NOTIFICATION : triggers
+
+    PATIENT {
+        string patientId PK
+        string fullName
+        string email
+        string phoneNumber
+        date dateOfBirth
+    }
+
+    DOCTOR {
+        string doctorId PK
+        string fullName
+        string speciality
+        string clinic
+        string location
+        float rating
+    }
+
+    APPOINTMENT {
+        string appointmentId PK
+        string patientId FK
+        string doctorId FK
+        datetime scheduledAt
+        string consultationType
+        string status
+    }
+
+    MEDICAL_RECORD {
+        string recordId PK
+        string patientId FK
+        string appointmentId FK
+        string recordType
+        string title
+        string fileUrl
+        datetime createdAt
+    }
+
+    PRESCRIPTION {
+        string prescriptionId PK
+        string patientId FK
+        string doctorId FK
+        string appointmentId FK
+        string medicationName
+        string dosage
+        string schedule
+    }
+
+    NOTIFICATION {
+        string notificationId PK
+        string patientId FK
+        string appointmentId FK
+        string category
+        string message
+        boolean isRead
+        datetime createdAt
+    }

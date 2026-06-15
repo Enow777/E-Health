@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1250" viewBox="0 0 1800 1250">
+  <defs>
+    <style>
+      .title{font:700 27px Arial;fill:#111}.entity{fill:#fff;stroke:#111;stroke-width:2.5}
+      .head{fill:#ddd;stroke:#111;stroke-width:2.5}.ename{font:700 21px Arial;fill:#111}
+      .field{font:17px Arial;fill:#111}.key{font:700 16px Arial;fill:#111}
+      .relation{fill:none;stroke:#111;stroke-width:2.5}.label{font:16px Arial;fill:#111}
+    </style>
+    <marker id="one" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="12" markerHeight="12" orient="auto">
+      <path d="M13 2V14M8 2V14" stroke="#111" stroke-width="1.8" fill="none"/>
+    </marker>
+    <marker id="many" viewBox="0 0 20 20" refX="18" refY="10" markerWidth="14" markerHeight="14" orient="auto">
+      <path d="M18 10L2 2M18 10L2 10M18 10L2 18" stroke="#111" stroke-width="1.8" fill="none"/>
+    </marker>
+  </defs>
+  <rect width="1800" height="1250" fill="#fff"/>
+  <text x="900" y="48" text-anchor="middle" class="title">HEALTH SERVICES APPLICATION - ENTITY RELATIONSHIP DIAGRAM</text>
+
+  <!-- Relationships are intentionally routed before entities to keep the schema readable. -->
+  <path d="M410 300 V370 H710 V430" class="relation" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text x="530" y="358" class="label">books</text>
+  <path d="M1390 320 V370 H1070 V430" class="relation" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text x="1208" y="358" class="label">receives</text>
+  <path d="M760 680 V735 H280 V805" class="relation" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text x="490" y="722" class="label">produces</text>
+  <path d="M890 680 V805" class="relation" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text x="905" y="744" class="label">generates</text>
+  <path d="M1020 680 V735 H1505 V805" class="relation" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text x="1260" y="722" class="label">triggers</text>
+
+  <!-- Patient -->
+  <rect x="90" y="120" width="420" height="220" class="entity"/><rect x="90" y="120" width="420" height="54" class="head"/>
+  <text x="108" y="154" class="ename">PATIENT</text>
+  <text x="112" y="206" class="key">PK</text><text x="190" y="206" class="field">patientId : string</text>
+  <text x="190" y="238" class="field">fullName : string</text><text x="190" y="270" class="field">email : string</text>
+  <text x="190" y="302" class="field">phoneNumber : string</text><text x="190" y="334" class="field">dateOfBirth : date</text>
+
+  <!-- Doctor -->
+  <rect x="1290" y="120" width="420" height="240" class="entity"/><rect x="1290" y="120" width="420" height="54" class="head"/>
+  <text x="1308" y="154" class="ename">DOCTOR</text>
+  <text x="1312" y="206" class="key">PK</text><text x="1390" y="206" class="field">doctorId : string</text>
+  <text x="1390" y="238" class="field">fullName : string</text><text x="1390" y="270" class="field">speciality : string</text>
+  <text x="1390" y="302" class="field">clinic : string</text><text x="1390" y="334" class="field">location : string</text>
+  <text x="1390" y="366" class="field">rating : float</text>
+
+  <!-- Appointment -->
+  <rect x="710" y="430" width="360" height="250" class="entity"/><rect x="710" y="430" width="360" height="54" class="head"/>
+  <text x="728" y="464" class="ename">APPOINTMENT</text>
+  <text x="732" y="516" class="key">PK</text><text x="810" y="516" class="field">appointmentId : string</text>
+  <text x="732" y="548" class="key">FK</text><text x="810" y="548" class="field">patientId : string</text>
+  <text x="732" y="580" class="key">FK</text><text x="810" y="580" class="field">doctorId : string</text>
+  <text x="810" y="612" class="field">scheduledAt : datetime</text><text x="810" y="644" class="field">consultationType : string</text>
+  <text x="810" y="676" class="field">status : string</text>
+
+  <!-- Medical Record -->
+  <rect x="70" y="805" width="430" height="280" class="entity"/><rect x="70" y="805" width="430" height="54" class="head"/>
+  <text x="88" y="839" class="ename">MEDICAL_RECORD</text>
+  <text x="92" y="891" class="key">PK</text><text x="170" y="891" class="field">recordId : string</text>
+  <text x="92" y="923" class="key">FK</text><text x="170" y="923" class="field">patientId : string</text>
+  <text x="92" y="955" class="key">FK</text><text x="170" y="955" class="field">appointmentId : string</text>
+  <text x="170" y="987" class="field">recordType : string</text><text x="170" y="1019" class="field">title : string</text>
+  <text x="170" y="1051" class="field">fileUrl : string</text><text x="170" y="1083" class="field">createdAt : datetime</text>
+
+  <!-- Prescription -->
+  <rect x="675" y="805" width="430" height="280" class="entity"/><rect x="675" y="805" width="430" height="54" class="head"/>
+  <text x="693" y="839" class="ename">PRESCRIPTION</text>
+  <text x="697" y="891" class="key">PK</text><text x="775" y="891" class="field">prescriptionId : string</text>
+  <text x="697" y="923" class="key">FK</text><text x="775" y="923" class="field">patientId : string</text>
+  <text x="697" y="955" class="key">FK</text><text x="775" y="955" class="field">doctorId : string</text>
+  <text x="697" y="987" class="key">FK</text><text x="775" y="987" class="field">appointmentId : string</text>
+  <text x="775" y="1019" class="field">medicationName : string</text><text x="775" y="1051" class="field">dosage : string</text>
+  <text x="775" y="1083" class="field">schedule : string</text>
+
+  <!-- Notification -->
+  <rect x="1300" y="805" width="430" height="280" class="entity"/><rect x="1300" y="805" width="430" height="54" class="head"/>
+  <text x="1318" y="839" class="ename">NOTIFICATION</text>
+  <text x="1322" y="891" class="key">PK</text><text x="1400" y="891" class="field">notificationId : string</text>
+  <text x="1322" y="923" class="key">FK</text><text x="1400" y="923" class="field">patientId : string</text>
+  <text x="1322" y="955" class="key">FK</text><text x="1400" y="955" class="field">appointmentId : string</text>
+  <text x="1400" y="987" class="field">category : string</text><text x="1400" y="1019" class="field">message : string</text>
+  <text x="1400" y="1051" class="field">isRead : boolean</text><text x="1400" y="1083" class="field">createdAt : datetime</text>
+</svg>
