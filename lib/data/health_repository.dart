@@ -51,6 +51,8 @@ class HealthRepository {
       _firestore.collection('doctorProfiles');
   CollectionReference<Map<String, dynamic>> get _chats =>
       _firestore.collection('chats');
+  CollectionReference<Map<String, dynamic>> get _hospitals =>
+      _firestore.collection('hospitals');
 
   // ── Streams ──────────────────────────────────────────────────────────────
 
@@ -80,6 +82,13 @@ class HealthRepository {
   Stream<List<Doctor>> watchDoctors() {
     return _doctors.orderBy('fullName').snapshots().map((snapshot) {
       final values = snapshot.docs
+          .where((doc) {
+            final status = (doc.data()['approvalStatus'] as String?) ?? '';
+            // Only show approved and independent doctors to patients
+            return status.isEmpty ||
+                status == 'approved' ||
+                status == 'independent';
+          })
           .map((doc) => Doctor.fromMap(doc.id, doc.data()))
           .toList();
       return values.isEmpty ? sample.doctors : values;
@@ -905,6 +914,70 @@ class HealthRepository {
       }
     }
     if (count > 0) await batch.commit();
+  }
+
+  // ── Hospitals ─────────────────────────────────────────────────────────────
+
+  /// Fetches all registered hospitals for the doctor setup screen.
+  Future<List<Map<String, dynamic>>> fetchHospitals() async {
+    final snap = await _hospitals.orderBy('name').get();
+    return snap.docs.map((d) => {'id': d.id, ...d.data()}).toList();
+  }
+
+  /// Sets the doctor's hospital affiliation and marks approval as pending.
+  /// Writes to both doctorProfiles and doctors collections.
+  Future<void> setDoctorHospital({
+    required String hospitalId,
+    required String hospitalName,
+  }) async {
+    final uid = currentUid;
+    if (uid == null) return;
+    // Fetch doctor name for the notification message
+    final profileSnap = await _doctorProfiles.doc(uid).get();
+    final doctorName = profileSnap.data()?['fullName'] as String? ?? 'A doctor';
+    final update = {
+      'hospitalId': hospitalId,
+      'hospitalName': hospitalName,
+      'approvalStatus': 'pending',
+    };
+    await _doctorProfiles.doc(uid).set(update, SetOptions(merge: true));
+    await _doctors.doc(uid).set(update, SetOptions(merge: true));
+    // Notify the hospital
+    await _hospitals.doc(hospitalId).collection('notifications').add({
+      'type': 'doctor_request',
+      'doctorId': uid,
+      'title': 'New doctor approval request',
+      'message': 'Dr. $doctorName has requested to join your hospital.',
+      'isRead': false,
+      'createdAt': DateTime.now().toIso8601String(),
+    });
+  }
+
+  /// Doctor chooses to work independently (no hospital affiliation).
+  Future<void> setIndependentDoctor() async {
+    final uid = currentUid;
+    if (uid == null) return;
+    const update = {
+      'approvalStatus': 'independent',
+      'hospitalId': '',
+      'hospitalName': '',
+    };
+    await _doctorProfiles.doc(uid).set(update, SetOptions(merge: true));
+    await _doctors.doc(uid).set(update, SetOptions(merge: true));
+  }
+
+  /// Cancels a pending hospital request or clears a rejection so the doctor
+  /// can select a different hospital.
+  Future<void> cancelHospitalRequest() async {
+    final uid = currentUid;
+    if (uid == null) return;
+    const update = {
+      'approvalStatus': '',
+      'hospitalId': '',
+      'hospitalName': '',
+    };
+    await _doctorProfiles.doc(uid).set(update, SetOptions(merge: true));
+    await _doctors.doc(uid).set(update, SetOptions(merge: true));
   }
 
   // ── Private helpers ───────────────────────────────────────────────────────

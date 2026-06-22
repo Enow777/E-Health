@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Hospital Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app-layout">
+  <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><span class="material-icons">local_hospital</span></div>
+      <div class="sidebar-logo-text">
+        <h3 class="hospital-name">Hospital</h3>
+        <span>Admin Portal</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Main</div>
+        <a class="nav-item active" href="dashboard.html" data-page="dashboard.html">
+          <span class="nav-icon material-icons">dashboard</span> Dashboard
+        </a>
+        <a class="nav-item" href="doctors.html" data-page="doctors.html">
+          <span class="nav-icon material-icons">medical_services</span> Doctors
+        </a>
+        <a class="nav-item" href="patients.html" data-page="patients.html">
+          <span class="nav-icon material-icons">people</span> Patients
+        </a>
+        <a class="nav-item" href="appointments.html" data-page="appointments.html">
+          <span class="nav-icon material-icons">event</span> Appointments
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Account</div>
+        <a class="nav-item" href="notifications.html" data-page="notifications.html">
+          <span class="nav-icon material-icons">notifications</span> Notifications
+          <span class="nav-badge" id="notif-nav-badge" style="display:none"></span>
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar">H</div>
+        <div class="sidebar-user-info">
+          <strong class="hospital-name">Hospital</strong>
+          <span>Administrator</span>
+        </div>
+        <button class="sidebar-signout material-icons" id="logout-btn" title="Sign out">logout</button>
+      </div>
+    </div>
+  </aside>
+  <div class="overlay"></div>
+
+  <!-- ── Main content ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+    <header class="top-header">
+      <button class="hamburger material-icons">menu</button>
+      <div class="header-title">
+        <h2>Dashboard</h2>
+        <p>Overview of your hospital activity</p>
+      </div>
+      <div class="header-actions">
+        <a href="notifications.html" class="notif-btn" title="Notifications">
+          <span class="material-icons">notifications</span>
+          <span class="notif-dot" id="header-notif-dot" style="display:none"></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon amber"><span class="material-icons">hourglass_top</span></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-pending">—</div>
+            <div class="stat-label">Pending Approvals</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><span class="material-icons">medical_services</span></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-doctors">—</div>
+            <div class="stat-label">Approved Doctors</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><span class="material-icons">people</span></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-patients">—</div>
+            <div class="stat-label">Total Patients</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><span class="material-icons">event</span></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-appointments">—</div>
+            <div class="stat-label">Today's Appointments</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content grid -->
+      <div class="content-grid">
+        <!-- Pending approvals -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Pending Doctor Requests</h3>
+            <a href="doctors.html" class="btn btn-sm btn-outline">View all</a>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr>
+                <th>Doctor</th><th>Hospital</th><th>Applied</th><th>Status</th><th></th>
+              </tr></thead>
+              <tbody id="recent-pending">
+                <tr><td colspan="5"><div class="loading-state"><div class="loading-spinner"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent appointments -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Appointments</h3>
+            <a href="appointments.html" class="btn btn-sm btn-outline">View all</a>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr>
+                <th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Status</th>
+              </tr></thead>
+              <tbody id="recent-appointments">
+                <tr><td colspan="4"><div class="loading-state"><div class="loading-spinner"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

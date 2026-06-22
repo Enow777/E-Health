@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/l10n/app_l10n.dart';
@@ -35,9 +36,11 @@ class _AppShellState extends State<AppShell> {
   void initState() {
     super.initState();
     tryHealthRepository()?.seedDemoDoctors();
-    FirebaseMessaging.instance.getToken().then((token) {
-      if (token != null) tryHealthRepository()?.saveMessagingToken(token);
-    });
+    if (!kIsWeb) {
+      FirebaseMessaging.instance.getToken().then((token) {
+        if (token != null) tryHealthRepository()?.saveMessagingToken(token);
+      });
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         NotificationService.instance.attachNavigator(_handleNotificationTap);

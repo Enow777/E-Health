@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctors — E-Health Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🛡️</div>
+      <div><div class="sidebar-logo-text">E-Health Admin</div><div class="sidebar-logo-sub">Super Administrator</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Overview</div>
+      <a href="dashboard.html"     class="nav-link"><span class="nav-icon">📊</span> Dashboard</a>
+      <div class="nav-section-title">Management</div>
+      <a href="hospitals.html"     class="nav-link"><span class="nav-icon">🏥</span> Hospitals</a>
+      <a href="doctors.html"       class="nav-link"><span class="nav-icon">👨‍⚕️</span> Doctors</a>
+      <a href="patients.html"      class="nav-link"><span class="nav-icon">🧑‍🤝‍🧑</span> Patients</a>
+      <div class="nav-section-title">Communications</div>
+      <a href="announcements.html" class="nav-link"><span class="nav-icon">📢</span> Announcements</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-badge">
+        <div class="admin-badge-icon">🛡️</div>
+        <div><div class="admin-badge-label">Super Admin</div><div class="admin-badge-sub">Full Access</div></div>
+      </div>
+      <button class="btn btn-ghost btn-full" id="logout-btn" style="color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.15)">Sign Out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+        <span class="page-title">Doctors (<span id="total-count">0</span>)</span>
+      </div>
+    </header>
+    <div class="content">
+      <div class="toolbar">
+        <input type="text" class="search-input" id="search-input" placeholder="Search by name, specialty, hospital…" />
+      </div>
+
+      <div id="tabs-container">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="tab-all">All</button>
+          <button class="tab-btn" data-tab="tab-pending">Pending</button>
+          <button class="tab-btn" data-tab="tab-approved">Approved</button>
+          <button class="tab-btn" data-tab="tab-independent">Independent</button>
+          <button class="tab-btn" data-tab="tab-rejected">Rejected</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-all">
+          <div class="card"><div class="table-wrap">
+            <table><thead><tr><th>Doctor</th><th>Hospital</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table>
+          </div></div>
+        </div>
+        <div class="tab-panel" id="tab-pending">
+          <div class="card"><div class="table-wrap">
+            <table><thead><tr><th>Doctor</th><th>Hospital</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table>
+          </div></div>
+        </div>
+        <div class="tab-panel" id="tab-approved">
+          <div class="card"><div class="table-wrap">
+            <table><thead><tr><th>Doctor</th><th>Hospital</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table>
+          </div></div>
+        </div>
+        <div class="tab-panel" id="tab-independent">
+          <div class="card"><div class="table-wrap">
+            <table><thead><tr><th>Doctor</th><th>Hospital</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table>
+          </div></div>
+        </div>
+        <div class="tab-panel" id="tab-rejected">
+          <div class="card"><div class="table-wrap">
+            <table><thead><tr><th>Doctor</th><th>Hospital</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-cell">Loading…</td></tr></tbody></table>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Doctor Details</h3>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="detail-modal-body"></div>
+  </div>
+</div>
+
+<script type="module" src="js/doctors.js"></script>
+</body>
+</html>

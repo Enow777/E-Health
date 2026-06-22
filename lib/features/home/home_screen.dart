@@ -38,7 +38,8 @@ class HomeScreen extends StatelessWidget {
               fallback: medications,
               builder: (context, allMedications) {
                 final upcomingList = allAppointments
-                    .where((a) => a.status != 'past')
+                    .where((a) =>
+                        a.status == 'upcoming' || a.status == 'pending')
                     .toList();
                 final nextAppointment =
                     upcomingList.isNotEmpty ? upcomingList.first : null;

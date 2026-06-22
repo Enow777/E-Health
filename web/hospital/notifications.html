@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — Hospital Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><span class="material-icons">local_hospital</span></div>
+      <div class="sidebar-logo-text"><h3 class="hospital-name">Hospital</h3><span>Admin Portal</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Main</div>
+        <a class="nav-item" href="dashboard.html" data-page="dashboard.html"><span class="nav-icon material-icons">dashboard</span>Dashboard</a>
+        <a class="nav-item" href="doctors.html" data-page="doctors.html"><span class="nav-icon material-icons">medical_services</span>Doctors</a>
+        <a class="nav-item" href="patients.html" data-page="patients.html"><span class="nav-icon material-icons">people</span>Patients</a>
+        <a class="nav-item" href="appointments.html" data-page="appointments.html"><span class="nav-icon material-icons">event</span>Appointments</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Account</div>
+        <a class="nav-item active" href="notifications.html" data-page="notifications.html">
+          <span class="nav-icon material-icons">notifications</span>Notifications
+          <span class="nav-badge" id="notif-nav-badge" style="display:none"></span>
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar">H</div>
+        <div class="sidebar-user-info"><strong class="hospital-name">Hospital</strong><span>Administrator</span></div>
+        <button class="sidebar-signout material-icons" id="logout-btn" title="Sign out">logout</button>
+      </div>
+    </div>
+  </aside>
+  <div class="overlay"></div>
+
+  <main class="main-content">
+    <header class="top-header">
+      <button class="hamburger material-icons">menu</button>
+      <div class="header-title">
+        <h2>Notifications</h2>
+        <p id="unread-count">Loading…</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-sm btn-outline" id="mark-all-read" disabled>
+          <span class="material-icons" style="font-size:16px">done_all</span> Mark all read
+        </button>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div class="toolbar" style="margin-bottom:16px">
+        <select class="filter-select" id="filter-notif">
+          <option value="all">All notifications</option>
+          <option value="unread">Unread</option>
+          <option value="doctor_request">Doctor requests</option>
+          <option value="approval">Approvals</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="notif-list" id="notif-list">
+          <div class="loading-state"><div class="loading-spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module" src="js/notifications.js"></script>
+</body>
+</html>

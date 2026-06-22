@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — E-Health Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🛡️</div>
+      <div>
+        <div class="sidebar-logo-text">E-Health Admin</div>
+        <div class="sidebar-logo-sub">Super Administrator</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Overview</div>
+      <a href="dashboard.html"     class="nav-link"><span class="nav-icon">📊</span> Dashboard</a>
+      <div class="nav-section-title">Management</div>
+      <a href="hospitals.html"     class="nav-link"><span class="nav-icon">🏥</span> Hospitals</a>
+      <a href="doctors.html"       class="nav-link"><span class="nav-icon">👨‍⚕️</span> Doctors</a>
+      <a href="patients.html"      class="nav-link"><span class="nav-icon">🧑‍🤝‍🧑</span> Patients</a>
+      <div class="nav-section-title">Communications</div>
+      <a href="announcements.html" class="nav-link"><span class="nav-icon">📢</span> Announcements</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-badge">
+        <div class="admin-badge-icon">🛡️</div>
+        <div>
+          <div class="admin-badge-label">Super Admin</div>
+          <div class="admin-badge-sub">Full Access</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-full" id="logout-btn" style="color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.15)">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+        <span class="page-title">Dashboard</span>
+      </div>
+    </header>
+    <div class="content">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green">🏥</div>
+          <div><div class="stat-label">Hospitals</div><div class="stat-value" id="stat-hospitals">—</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">👨‍⚕️</div>
+          <div><div class="stat-label">Doctors</div><div class="stat-value" id="stat-doctors">—</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">🧑‍🤝‍🧑</div>
+          <div><div class="stat-label">Patients</div><div class="stat-value" id="stat-patients">—</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber">📅</div>
+          <div><div class="stat-label">Appointments</div><div class="stat-value" id="stat-appointments">—</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Pending Doctors -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Pending Doctor Requests</h3>
+            <a href="doctors.html" class="btn btn-sm btn-ghost">View All</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Doctor</th><th>Hospital</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody id="pending-doctors-tbody">
+                <tr><td colspan="4" class="empty-cell">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Hospitals -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Hospitals</h3>
+            <a href="hospitals.html" class="btn btn-sm btn-ghost">View All</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Hospital</th><th>Type</th><th>Joined</th></tr></thead>
+              <tbody id="recent-hospitals-tbody">
+                <tr><td colspan="3" class="empty-cell">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

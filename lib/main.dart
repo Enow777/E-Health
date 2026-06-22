@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'app.dart';
 import 'core/l10n/locale_notifier.dart';
 import 'data/notification_service.dart';
 import 'data/reminder_service.dart';
+import 'firebase_options.dart';
 
 export 'app.dart';
 
@@ -24,10 +26,16 @@ Future<void> main() async {
 
   var firebaseReady = false;
   try {
-    await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    if (!kIsWeb) {
+      FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
+    }
     await NotificationService.instance.initialise();
-    await ReminderService().configure();
+    if (!kIsWeb) {
+      await ReminderService().configure();
+    }
     firebaseReady = true;
   } on Object {
     firebaseReady = false;

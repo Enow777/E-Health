@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Health Super Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🛡️</div>
+      <div class="auth-logo-text">
+        <h2>E-Health Admin</h2>
+        <span>Super Administrator Portal</span>
+      </div>
+    </div>
+    <h1 class="auth-title">Sign In</h1>
+    <p class="auth-subtitle">Access is restricted to authorized administrators only.</p>
+
+    <div class="auth-error" id="error-msg"></div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label">Admin Email</label>
+        <input type="email" id="email" class="form-control" placeholder="admin@ehealthapp.com" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" id="login-btn">Sign In</button>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { signIn, redirectIfLoggedIn } from './js/auth.js';
+
+  redirectIfLoggedIn();
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('error') === 'unauthorized') {
+    const el = document.getElementById('error-msg');
+    el.textContent = 'Access denied. This account is not an admin.';
+    el.classList.add('show');
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const err = document.getElementById('error-msg');
+    err.classList.remove('show');
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+    try {
+      await signIn(
+        document.getElementById('email').value,
+        document.getElementById('password').value,
+      );
+      window.location.href = 'dashboard.html';
+    } catch (error) {
+      err.textContent = error.message;
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointments — Hospital Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app-layout" id="appointments-page">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><span class="material-icons">local_hospital</span></div>
+      <div class="sidebar-logo-text"><h3 class="hospital-name">Hospital</h3><span>Admin Portal</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Main</div>
+        <a class="nav-item" href="dashboard.html" data-page="dashboard.html"><span class="nav-icon material-icons">dashboard</span>Dashboard</a>
+        <a class="nav-item" href="doctors.html" data-page="doctors.html"><span class="nav-icon material-icons">medical_services</span>Doctors</a>
+        <a class="nav-item" href="patients.html" data-page="patients.html"><span class="nav-icon material-icons">people</span>Patients</a>
+        <a class="nav-item active" href="appointments.html" data-page="appointments.html"><span class="nav-icon material-icons">event</span>Appointments</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Account</div>
+        <a class="nav-item" href="notifications.html" data-page="notifications.html">
+          <span class="nav-icon material-icons">notifications</span>Notifications
+          <span class="nav-badge" id="notif-nav-badge" style="display:none"></span>
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar">H</div>
+        <div class="sidebar-user-info"><strong class="hospital-name">Hospital</strong><span>Administrator</span></div>
+        <button class="sidebar-signout material-icons" id="logout-btn" title="Sign out">logout</button>
+      </div>
+    </div>
+  </aside>
+  <div class="overlay"></div>
+
+  <main class="main-content">
+    <header class="top-header">
+      <button class="hamburger material-icons">menu</button>
+      <div class="header-title"><h2>Appointments</h2><p>All appointments across your hospital</p></div>
+      <div class="header-actions">
+        <a href="notifications.html" class="notif-btn">
+          <span class="material-icons">notifications</span>
+          <span class="notif-dot" id="header-notif-dot" style="display:none"></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <!-- Filters -->
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon material-icons">search</span>
+          <input type="text" class="search-input" id="search-appts" placeholder="Search patient or doctor…" />
+        </div>
+        <select class="filter-select" id="filter-status">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <input type="date" class="filter-select" id="filter-date" style="background-image:none" />
+        <select class="filter-select" id="filter-doctor-appts">
+          <option value="">All doctors</option>
+        </select>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="all-appts">All <span class="tab-count" id="count-all-appts">0</span></button>
+        <button class="tab-btn" data-tab="pending-appts">Pending <span class="tab-count" id="count-pending-appts">0</span></button>
+        <button class="tab-btn" data-tab="upcoming-appts">Upcoming <span class="tab-count" id="count-upcoming-appts">0</span></button>
+        <button class="tab-btn" data-tab="completed-appts">Completed <span class="tab-count" id="count-completed-appts">0</span></button>
+        <button class="tab-btn" data-tab="cancelled-appts">Cancelled <span class="tab-count" id="count-cancelled-appts">0</span></button>
+      </div>
+
+      <!-- All -->
+      <div class="tab-panel active" data-tab="all-appts">
+        <div class="card">
+          <div class="table-wrapper">
+            <table><thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Rated</th><th>Booked</th></tr></thead>
+            <tbody id="tbody-all"><tr><td colspan="7"><div class="loading-state"><div class="loading-spinner"></div></div></td></tr></tbody></table>
+          </div>
+        </div>
+      </div>
+      <!-- Pending -->
+      <div class="tab-panel" data-tab="pending-appts">
+        <div class="card"><div class="table-wrapper">
+          <table><thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Rated</th><th>Booked</th></tr></thead>
+          <tbody id="tbody-pending"></tbody></table>
+        </div></div>
+      </div>
+      <!-- Upcoming -->
+      <div class="tab-panel" data-tab="upcoming-appts">
+        <div class="card"><div class="table-wrapper">
+          <table><thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Rated</th><th>Booked</th></tr></thead>
+          <tbody id="tbody-upcoming"></tbody></table>
+        </div></div>
+      </div>
+      <!-- Completed -->
+      <div class="tab-panel" data-tab="completed-appts">
+        <div class="card"><div class="table-wrapper">
+          <table><thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Rated</th><th>Booked</th></tr></thead>
+          <tbody id="tbody-completed"></tbody></table>
+        </div></div>
+      </div>
+      <!-- Cancelled -->
+      <div class="tab-panel" data-tab="cancelled-appts">
+        <div class="card"><div class="table-wrapper">
+          <table><thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Rated</th><th>Booked</th></tr></thead>
+          <tbody id="tbody-cancelled"></tbody></table>
+        </div></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module" src="js/appointments.js"></script>
+</body>
+</html>

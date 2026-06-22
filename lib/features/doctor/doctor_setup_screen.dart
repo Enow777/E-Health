@@ -603,12 +603,16 @@ class _DoctorSetupScreen2State extends State<DoctorSetupScreen2> {
         nextAvailable: existing?.nextAvailable ?? 'Available today',
         isAvailable: existing?.isAvailable ?? true,
         setupComplete: true,
+        hospitalId: existing?.hospitalId ?? '',
+        hospitalName: existing?.hospitalName ?? '',
+        approvalStatus: existing?.approvalStatus ?? '',
       );
       await repo.updateDoctorProfile(updated);
       if (!mounted) return;
       if (widget.isFirstSetup) {
-        // Pop Screen2; _DoctorRouter now sees setupComplete:true and renders DoctorShell.
-        Navigator.of(context).pop();
+        // Profile complete — pop to root so _DoctorRouter shows the
+        // hospital affiliation screen automatically via the profile stream.
+        Navigator.of(context).popUntil((r) => r.isFirst);
       } else {
         Navigator.of(context)
           ..pop()

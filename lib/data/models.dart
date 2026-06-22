@@ -404,6 +404,9 @@ class DoctorProfile {
     this.isAvailable = true,
     this.setupComplete = false,
     this.weeklySchedule = const {},
+    this.hospitalId = '',
+    this.hospitalName = '',
+    this.approvalStatus = '',
   });
 
   final String id;
@@ -424,6 +427,10 @@ class DoctorProfile {
   final bool isAvailable;
   final bool setupComplete;
   final Map<String, dynamic> weeklySchedule;
+  // Hospital affiliation: '' = independent, 'pending'/'approved'/'rejected' = under a hospital
+  final String hospitalId;
+  final String hospitalName;
+  final String approvalStatus;
 
   /// Joined specialties string for backwards-compatible reads and display.
   String get specialty =>
@@ -461,6 +468,9 @@ class DoctorProfile {
       setupComplete: data['setupComplete'] == true,
       weeklySchedule: Map<String, dynamic>.from(
           data['weeklySchedule'] as Map? ?? {}),
+      hospitalId: _string(data['hospitalId'], ''),
+      hospitalName: _string(data['hospitalName'], ''),
+      approvalStatus: _string(data['approvalStatus'], ''),
     );
   }
 
@@ -486,6 +496,9 @@ class DoctorProfile {
     'weeklySchedule': weeklySchedule,
     'initials': initials,
     'distance': 'Nearby',
+    if (hospitalId.isNotEmpty) 'hospitalId': hospitalId,
+    if (hospitalName.isNotEmpty) 'hospitalName': hospitalName,
+    if (approvalStatus.isNotEmpty) 'approvalStatus': approvalStatus,
   };
 
   Doctor toDoctor() => Doctor(
@@ -517,6 +530,9 @@ class DoctorProfile {
     bool? isAvailable,
     bool? setupComplete,
     Map<String, dynamic>? weeklySchedule,
+    String? hospitalId,
+    String? hospitalName,
+    String? approvalStatus,
   }) {
     return DoctorProfile(
       id: id,
@@ -537,6 +553,9 @@ class DoctorProfile {
       isAvailable: isAvailable ?? this.isAvailable,
       setupComplete: setupComplete ?? this.setupComplete,
       weeklySchedule: weeklySchedule ?? this.weeklySchedule,
+      hospitalId: hospitalId ?? this.hospitalId,
+      hospitalName: hospitalName ?? this.hospitalName,
+      approvalStatus: approvalStatus ?? this.approvalStatus,
     );
   }
 }

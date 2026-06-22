@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Admin Portal — E-Health</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .auth-divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+    .auth-divider::before, .auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .auth-divider span { font-size:.8rem; color:var(--text-muted); white-space:nowrap; }
+    .error-banner {
+      background:var(--danger-light); border:1px solid #FECACA; border-radius:8px;
+      padding:10px 14px; font-size:.85rem; color:var(--danger); margin-bottom:16px; display:none;
+    }
+    .success-banner {
+      background:var(--success-light); border:1px solid #A7F3D0; border-radius:8px;
+      padding:10px 14px; font-size:.85rem; color:var(--success); margin-bottom:16px; display:none;
+    }
+    [data-panel] { display:none; }
+    [data-panel].active { display:block; }
+  </style>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card">
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><span class="material-icons">local_hospital</span></div>
+      <div class="auth-logo-text">
+        <h1>E-Health</h1>
+        <span>Hospital Admin Portal</span>
+      </div>
+    </div>
+
+    <!-- Error banner -->
+    <div class="error-banner" id="error-banner"></div>
+    <div class="success-banner" id="success-banner"></div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('register')">Register Hospital</button>
+    </div>
+
+    <!-- ── Login panel ─────────────────────────────────────────────────── -->
+    <div data-panel="login" class="active">
+      <h2>Welcome back</h2>
+      <p>Sign in to your hospital admin account</p>
+      <form id="login-form" autocomplete="on" style="margin-top:24px">
+        <div class="form-group">
+          <label for="login-email">Email address</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">email</span>
+            <input type="email" id="login-email" class="form-control" placeholder="admin@hospital.com" required autocomplete="email" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">lock</span>
+            <input type="password" id="login-password" class="form-control" placeholder="Enter password" required autocomplete="current-password" />
+            <button type="button" class="password-toggle material-icons" onclick="togglePassword('login-password',this)">visibility</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="login-btn">
+          <span id="login-spinner" class="spinner" style="display:none"></span>
+          Sign In
+        </button>
+      </form>
+    </div>
+
+    <!-- ── Register panel ─────────────────────────────────────────────── -->
+    <div data-panel="register">
+      <h2>Register your hospital</h2>
+      <p>Create an admin account to manage your hospital</p>
+      <form id="register-form" autocomplete="on" style="margin-top:24px">
+        <div class="form-group">
+          <label for="reg-name">Hospital name *</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">local_hospital</span>
+            <input type="text" id="reg-name" class="form-control" placeholder="Central Hospital Yaoundé" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-type">Hospital type *</label>
+          <select id="reg-type" class="form-select" required>
+            <option value="">Select type</option>
+            <option>General Hospital</option>
+            <option>Specialist Clinic</option>
+            <option>Teaching Hospital</option>
+            <option>Private Clinic</option>
+            <option>Community Health Centre</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="reg-address">Address</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">location_on</span>
+            <input type="text" id="reg-address" class="form-control" placeholder="Hospital address" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">Phone number</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">phone</span>
+            <input type="tel" id="reg-phone" class="form-control" placeholder="+237 6XX XXX XXX" />
+          </div>
+        </div>
+        <div class="auth-divider"><span>Admin Account</span></div>
+        <div class="form-group">
+          <label for="reg-email">Admin email *</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">email</span>
+            <input type="email" id="reg-email" class="form-control" placeholder="admin@hospital.com" required autocomplete="email" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password *</label>
+          <div class="input-group">
+            <span class="input-icon material-icons">lock</span>
+            <input type="password" id="reg-password" class="form-control" placeholder="Min. 8 characters" required autocomplete="new-password" minlength="8" />
+            <button type="button" class="password-toggle material-icons" onclick="togglePassword('reg-password',this)">visibility</button>
+          </div>
+          <div class="form-hint">Must be at least 8 characters.</div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="register-btn">
+          <span id="register-spinner" class="spinner" style="display:none"></span>
+          Create Hospital Account
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { signIn, registerHospital, redirectIfLoggedIn } from './js/auth.js';
+
+  redirectIfLoggedIn();
+
+  // Tab switching
+  window.switchTab = (tab) => {
+    document.querySelectorAll('[data-panel]').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector(`[data-panel="${tab}"]`).classList.add('active');
+    document.querySelectorAll('.auth-tab')[tab === 'login' ? 0 : 1].classList.add('active');
+    hideMessages();
+  };
+
+  // Password toggle
+  window.togglePassword = (id, btn) => {
+    const input = document.getElementById(id);
+    const show  = input.type === 'password';
+    input.type  = show ? 'text' : 'password';
+    btn.textContent = show ? 'visibility_off' : 'visibility';
+  };
+
+  // Error/success helpers
+  const showError = (msg) => {
+    const el = document.getElementById('error-banner');
+    el.textContent = msg; el.style.display = 'block';
+    document.getElementById('success-banner').style.display = 'none';
+  };
+  const showSuccess = (msg) => {
+    const el = document.getElementById('success-banner');
+    el.textContent = msg; el.style.display = 'block';
+    document.getElementById('error-banner').style.display = 'none';
+  };
+  const hideMessages = () => {
+    document.getElementById('error-banner').style.display = 'none';
+    document.getElementById('success-banner').style.display = 'none';
+  };
+
+  // Detect ?error= query param
+  const urlError = new URLSearchParams(location.search).get('error');
+  if (urlError === 'access_denied') showError('Access denied. Only hospital accounts can log in here.');
+  if (urlError === 'no_hospital')   showError('Hospital profile not found. Please contact support.');
+
+  // ── Login form ────────────────────────────────────────────────────────────
+  document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
+    hideMessages();
+    const btn     = document.getElementById('login-btn');
+    const spinner = document.getElementById('login-spinner');
+    btn.disabled = true; spinner.style.display = 'inline-block';
+    try {
+      await signIn(
+        document.getElementById('login-email').value.trim(),
+        document.getElementById('login-password').value,
+      );
+      window.location.href = 'dashboard.html';
+    } catch (err) {
+      const msg = friendlyError(err.code || err.message);
+      showError(msg);
+    } finally {
+      btn.disabled = false; spinner.style.display = 'none';
+    }
+  };
+
+  // ── Register form ─────────────────────────────────────────────────────────
+  document.getElementById('register-form').onsubmit = async (e) => {
+    e.preventDefault();
+    hideMessages();
+    const btn     = document.getElementById('register-btn');
+    const spinner = document.getElementById('register-spinner');
+    btn.disabled = true; spinner.style.display = 'inline-block';
+    try {
+      await registerHospital({
+        name:     document.getElementById('reg-name').value.trim(),
+        type:     document.getElementById('reg-type').value,
+        address:  document.getElementById('reg-address').value.trim(),
+        phone:    document.getElementById('reg-phone').value.trim(),
+        email:    document.getElementById('reg-email').value.trim(),
+        password: document.getElementById('reg-password').value,
+      });
+      showSuccess('Hospital registered successfully! Redirecting…');
+      setTimeout(() => window.location.href = 'dashboard.html', 1500);
+    } catch (err) {
+      showError(friendlyError(err.code || err.message));
+    } finally {
+      btn.disabled = false; spinner.style.display = 'none';
+    }
+  };
+
+  function friendlyError(code) {
+    const map = {
+      'auth/invalid-email':           'Invalid email address.',
+      'auth/user-not-found':          'No account found with this email.',
+      'auth/wrong-password':          'Incorrect password.',
+      'auth/invalid-credential':      'Invalid email or password.',
+      'auth/email-already-in-use':    'This email is already registered.',
+      'auth/weak-password':           'Password must be at least 8 characters.',
+      'auth/too-many-requests':       'Too many attempts. Please wait and try again.',
+      'auth/network-request-failed':  'Network error. Check your connection.',
+    };
+    return map[code] || code || 'Something went wrong. Please try again.';
+  }
+</script>
+</body>
+</html>
