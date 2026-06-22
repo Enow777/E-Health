@@ -53,6 +53,8 @@ class HealthRepository {
       _firestore.collection('chats');
   CollectionReference<Map<String, dynamic>> get _hospitals =>
       _firestore.collection('hospitals');
+  CollectionReference<Map<String, dynamic>> get _recordAccess =>
+      _firestore.collection('recordAccess');
 
   // ── Streams ──────────────────────────────────────────────────────────────
 
@@ -744,6 +746,136 @@ class HealthRepository {
       category: 'medication',
       title: 'New prescription',
       message: '${medication.name} has been prescribed for you.',
+    );
+  }
+
+  // ── Record Access Control ─────────────────────────────────────────────────
+
+  /// Patient: watch all record access entries for the signed-in patient.
+  Stream<List<RecordAccess>> watchMyRecordAccess() {
+    final uid = patientId;
+    if (uid == null) return Stream.value([]);
+    return _recordAccess
+        .where('patientId', isEqualTo: uid)
+        .snapshots()
+        .map((snap) => snap.docs
+            .map((doc) => RecordAccess.fromMap(doc.id, doc.data()))
+            .toList());
+  }
+
+  /// Doctor: check access status for a specific patient.
+  Stream<RecordAccess?> watchRecordAccessForDoctor(String patientId) {
+    final uid = currentUid;
+    if (uid == null) return Stream.value(null);
+    return _recordAccess
+        .where('patientId', isEqualTo: patientId)
+        .where('doctorId', isEqualTo: uid)
+        .snapshots()
+        .map((snap) => snap.docs.isEmpty
+            ? null
+            : RecordAccess.fromMap(snap.docs.first.id, snap.docs.first.data()));
+  }
+
+  /// Patient blocks a doctor from viewing records.
+  Future<void> blockDoctorAccess({
+    required String doctorId,
+    required String doctorName,
+  }) async {
+    final uid = patientId;
+    if (uid == null) return;
+    final existing = await _recordAccess
+        .where('patientId', isEqualTo: uid)
+        .where('doctorId', isEqualTo: doctorId)
+        .get();
+    final now = DateTime.now().toIso8601String();
+    if (existing.docs.isNotEmpty) {
+      await _recordAccess.doc(existing.docs.first.id).update({
+        'status': 'blocked',
+        'updatedAt': now,
+      });
+    } else {
+      final profile = await _patients.doc(uid).get();
+      final patientName = (profile.data()?['fullName'] as String?) ?? 'Patient';
+      await _recordAccess.add({
+        'patientId': uid,
+        'doctorId': doctorId,
+        'doctorName': doctorName,
+        'patientName': patientName,
+        'status': 'blocked',
+        'updatedAt': now,
+        'createdAt': now,
+      });
+    }
+  }
+
+  /// Patient grants a doctor access to view records.
+  Future<void> grantDoctorAccess({
+    required String doctorId,
+    required String doctorName,
+  }) async {
+    final uid = patientId;
+    if (uid == null) return;
+    final existing = await _recordAccess
+        .where('patientId', isEqualTo: uid)
+        .where('doctorId', isEqualTo: doctorId)
+        .get();
+    final now = DateTime.now().toIso8601String();
+    if (existing.docs.isNotEmpty) {
+      await _recordAccess.doc(existing.docs.first.id).update({
+        'status': 'granted',
+        'updatedAt': now,
+      });
+    } else {
+      final profile = await _patients.doc(uid).get();
+      final patientName = (profile.data()?['fullName'] as String?) ?? 'Patient';
+      await _recordAccess.add({
+        'patientId': uid,
+        'doctorId': doctorId,
+        'doctorName': doctorName,
+        'patientName': patientName,
+        'status': 'granted',
+        'updatedAt': now,
+        'createdAt': now,
+      });
+    }
+  }
+
+  /// Doctor requests access to a patient's records.
+  Future<void> requestRecordAccess({
+    required String patientId,
+    required String patientName,
+  }) async {
+    final uid = currentUid;
+    if (uid == null) return;
+    final profileSnap = await _doctorProfiles.doc(uid).get();
+    final doctorName =
+        (profileSnap.data()?['fullName'] as String?) ?? 'Doctor';
+    final existing = await _recordAccess
+        .where('patientId', isEqualTo: patientId)
+        .where('doctorId', isEqualTo: uid)
+        .get();
+    final now = DateTime.now().toIso8601String();
+    if (existing.docs.isNotEmpty) {
+      await _recordAccess.doc(existing.docs.first.id).update({
+        'status': 'requested',
+        'updatedAt': now,
+      });
+    } else {
+      await _recordAccess.add({
+        'patientId': patientId,
+        'doctorId': uid,
+        'doctorName': doctorName,
+        'patientName': patientName,
+        'status': 'requested',
+        'updatedAt': now,
+        'createdAt': now,
+      });
+    }
+    await _addNotification(
+      uid: patientId,
+      category: 'record',
+      title: 'Record access request',
+      message: 'Dr. $doctorName is requesting access to view your medical records.',
     );
   }
 

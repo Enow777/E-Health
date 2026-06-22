@@ -210,7 +210,7 @@ class PatientDetailScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  _RecordsTab(patientId: patient.id, repo: repo),
+                  _RecordsTab(patientId: patient.id, patientName: patient.fullName, repo: repo),
                   _MedicationsTab(patientId: patient.id, repo: repo),
                 ],
               ),
@@ -307,64 +307,184 @@ class _PatientInfoBanner extends StatelessWidget {
 }
 
 class _RecordsTab extends StatelessWidget {
-  const _RecordsTab({required this.patientId, required this.repo});
+  const _RecordsTab({required this.patientId, required this.repo, required this.patientName});
   final String patientId;
+  final String patientName;
   final HealthRepository? repo;
 
   @override
   Widget build(BuildContext context) {
-    return HealthStream<List<MedicalRecord>>(
-      stream: repo?.watchPatientRecords(patientId),
-      fallback: const [],
-      builder: (context, records) {
-        if (records.isEmpty) {
+    final l10n = AppL10n.of(context);
+    return StreamBuilder<RecordAccess?>(
+      stream: repo?.watchRecordAccessForDoctor(patientId),
+      builder: (context, accessSnap) {
+        if (accessSnap.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final access = accessSnap.data;
+
+        if (access != null && access.isBlocked) {
+          return _BlockedView(
+            patientId: patientId,
+            patientName: patientName,
+            repo: repo,
+            l10n: l10n,
+          );
+        }
+
+        if (access != null && access.isRequested) {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(32),
-              child: Text(AppL10n.of(context).noRecordsForPatient),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.hourglass_top_rounded,
+                      size: 56, color: Color(0xFFD97706)),
+                  const SizedBox(height: 16),
+                  Text(l10n.accessRequestPending,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  Text(l10n.accessRequested,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.muted)),
+                ],
+              ),
             ),
           );
         }
-        return ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount: records.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
-          itemBuilder: (context, i) {
-            final r = records[i];
-            return SoftCard(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFEAF4F2),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Icon(r.icon,
-                        color: AppColors.primary, size: 20),
+
+        return HealthStream<List<MedicalRecord>>(
+          stream: repo?.watchPatientRecords(patientId),
+          fallback: const [],
+          builder: (context, records) {
+            if (records.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Text(l10n.noRecordsForPatient),
+                ),
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: records.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              itemBuilder: (context, i) {
+                final r = records[i];
+                return SoftCard(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: const Color(0xFFEAF4F2),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Icon(r.icon,
+                            color: AppColors.primary, size: 20),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(r.title,
+                                style:
+                                    Theme.of(context).textTheme.titleMedium),
+                            Text('${r.type} · ${r.date}',
+                                style:
+                                    Theme.of(context).textTheme.bodyMedium),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(r.title,
-                            style:
-                                Theme.of(context).textTheme.titleMedium),
-                        Text('${r.type} · ${r.date}',
-                            style:
-                                Theme.of(context).textTheme.bodyMedium),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             );
           },
         );
       },
     );
+  }
+}
+
+class _BlockedView extends StatefulWidget {
+  const _BlockedView({
+    required this.patientId,
+    required this.patientName,
+    required this.repo,
+    required this.l10n,
+  });
+  final String patientId;
+  final String patientName;
+  final HealthRepository? repo;
+  final AppL10n l10n;
+
+  @override
+  State<_BlockedView> createState() => _BlockedViewState();
+}
+
+class _BlockedViewState extends State<_BlockedView> {
+  bool _sending = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.lock_outline_rounded,
+                size: 56, color: Color(0xFFDC2626)),
+            const SizedBox(height: 16),
+            Text(widget.l10n.accessBlocked,
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(widget.l10n.recordsAccessBlocked,
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: AppColors.muted)),
+            const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: _sending ? null : _requestAccess,
+              icon: _sending
+                  ? const SizedBox.square(
+                      dimension: 16,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : const Icon(Icons.send_rounded, size: 18),
+              label: Text(widget.l10n.requestAccess),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _requestAccess() async {
+    setState(() => _sending = true);
+    try {
+      await widget.repo?.requestRecordAccess(
+        patientId: widget.patientId,
+        patientName: widget.patientName,
+      );
+      if (mounted) {
+        showAppMessage(context, widget.l10n.accessRequestSent);
+      }
+    } on Object catch (e) {
+      if (mounted) showAppMessage(context, 'Failed: $e');
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
   }
 }
 

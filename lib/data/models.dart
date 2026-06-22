@@ -382,6 +382,43 @@ class RecordShare {
       );
 }
 
+// ── RecordAccess ─────────────────────────────────────────────────────────────
+
+class RecordAccess {
+  const RecordAccess({
+    required this.id,
+    required this.patientId,
+    required this.doctorId,
+    required this.doctorName,
+    required this.patientName,
+    required this.status,
+    required this.updatedAt,
+  });
+
+  final String id;
+  final String patientId;
+  final String doctorId;
+  final String doctorName;
+  final String patientName;
+  final String status; // 'granted' | 'blocked' | 'requested'
+  final String updatedAt;
+
+  bool get isGranted   => status == 'granted';
+  bool get isBlocked   => status == 'blocked';
+  bool get isRequested => status == 'requested';
+
+  factory RecordAccess.fromMap(String id, Map<String, dynamic> data) =>
+      RecordAccess(
+        id: id,
+        patientId: _string(data['patientId'], ''),
+        doctorId: _string(data['doctorId'], ''),
+        doctorName: _string(data['doctorName'], 'Doctor'),
+        patientName: _string(data['patientName'], 'Patient'),
+        status: _string(data['status'], 'granted'),
+        updatedAt: _string(data['updatedAt'], ''),
+      );
+}
+
 // ── DoctorProfile ─────────────────────────────────────────────────────────────
 
 class DoctorProfile {

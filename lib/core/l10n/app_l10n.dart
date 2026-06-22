@@ -471,6 +471,28 @@ class AppL10n {
   String get searchDoctorsOrSpecialties => _fr ? 'Chercher médecins ou spécialités' : 'Search doctors or specialties';
   String get availableDoctors => _fr ? 'Médecins disponibles' : 'Available doctors';
   String get viewAvailableTimes => _fr ? 'Voir les horaires disponibles' : 'View available times';
+
+  // ── Record access / privacy ────────────────────────────────────────────────
+  String get recordPrivacyTitle => _fr ? 'Confidentialité des dossiers' : 'Record Privacy';
+  String get recordPrivacySubtitle => _fr ? 'Contrôlez quels médecins peuvent consulter vos dossiers médicaux.' : 'Control which doctors can view your medical records.';
+  String get doctorAccess => _fr ? 'Accès des médecins' : 'Doctor Access';
+  String get pendingAccessRequests => _fr ? 'Demandes en attente' : 'Pending Requests';
+  String get noPendingRequests => _fr ? 'Aucune demande en attente' : 'No pending requests';
+  String get noDoctorAccess => _fr ? "Aucun médecin n'a encore eu accès à vos dossiers." : 'No doctors have accessed your records yet.';
+  String get accessGranted => _fr ? 'Accès accordé' : 'Access granted';
+  String get accessBlocked => _fr ? 'Accès bloqué' : 'Access blocked';
+  String get accessRequested => _fr ? 'Accès demandé' : 'Access requested';
+  String get blockAccess => _fr ? "Bloquer l'accès" : 'Block access';
+  String get grantAccess => _fr ? "Accorder l'accès" : 'Grant access';
+  String get requestAccess => _fr ? "Demander l'accès" : 'Request access';
+  String get acceptRequest => _fr ? 'Accepter' : 'Accept';
+  String get rejectRequest => _fr ? 'Rejeter' : 'Reject';
+  String get accessRequestSent => _fr ? 'Demande envoyée au patient' : 'Access request sent to patient';
+  String get accessRequestPending => _fr ? 'En attente de la réponse du patient' : 'Waiting for patient approval';
+  String get recordsAccessBlocked => _fr ? "Ce patient a bloqué l'accès à ses dossiers médicaux." : 'This patient has blocked access to their medical records.';
+  String accessUpdated(String name) => _fr ? "Accès mis à jour pour Dr. $name" : 'Access updated for Dr. $name';
+  String requestFrom(String name) => _fr ? 'Dr. $name demande à consulter vos dossiers médicaux.' : 'Dr. $name is requesting access to view your medical records.';
+  String get wantsToViewRecords => _fr ? 'souhaite consulter vos dossiers médicaux' : 'wants to view your medical records';
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

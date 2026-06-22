@@ -10,6 +10,7 @@ import '../../data/sample_data.dart';
 import '../doctors/discover_screen.dart';
 import '../notifications/notifications_screen.dart';
 import 'record_details_screen.dart';
+import 'record_privacy_screen.dart';
 
 class RecordsScreen extends StatelessWidget {
   const RecordsScreen({super.key, this.showHeader = true});
@@ -54,8 +55,11 @@ class RecordsScreen extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () =>
-                      showAppMessage(context, 'Privacy settings opened'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const RecordPrivacyScreen(),
+                    ),
+                  ),
                   child: Text(l10n.manage),
                 ),
               ],
